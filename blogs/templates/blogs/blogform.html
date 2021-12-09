@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+{% block content %}
+<h5 style="margin-left: 630px; margin-top: 15px;">Write Your Blog</h5>
+<a href="{% url 'account' request.user.profile.id %}"><button class="btn" style="margin-left: 212.68px;" >&#60;</button></a>
+
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="container">
+        <br>
+
+        {% for field in form %}
+        <div class="form__field" >
+            <label for="formInput#text">{{field.label}}</label>
+            {% if not field.label == 'Tags'%}
+                <span>{{field}}</span>
+            
+            {% else %}
+                {% for tag in field %}
+                    <span>{{tag}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+    <input type="submit" value="Post" class="btn btn--sub btn--lg  my-md">
+    </div>
+</form>
+{% endblock content %}

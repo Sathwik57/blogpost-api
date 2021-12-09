@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+{% load filtags %}
+{% load static %}
+{% block content %}
+<div class="container" style="margin-left: 450px;">
+    {% for post in blogs %}
+    <div class="card" style="background-color: lightgray; width: 50%; margin-bottom: 30px;">
+        <p><label style="padding:5px ;">
+            <a href="{% url 'view-blog' post.id%}">{{post.title}}&nbsp;
+            </a> by {{post.writer}} &ensp; -{{post.created}}</label></p>
+        <a href="{% url 'view-blog' post.id%}">
+            <img src={{post.image_url}} style="padding-left:5px ;padding-right:5px" >
+        </a>
+        <a>#{{post.tags.all|tag_filter}}</a>
+        <p>{{post.post|slice:'150'}} &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+             <a href="{% url 'view-blog' post.id%}">Read More</a></p>
+    </div>
+
+    {% endfor %}
+    {% if not blogs%}
+    <label ><p style="margin-left: 212.68px; margin-top: 30px;">No posts to show</p></label>
+    {% endif%}
+    <a href="{% url 'home'  %}"><button class="btn" style="margin-left: 212.68px; margin-top: 30px;" >Goto Home</button></a>
+</div>
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<form method="POST" action="">
+    {% csrf_token %}
+    <div class="container">
+
+        {% for field in form %}
+        <div class="form__field" >
+            <label for="formInput#text">{{field.label}}</label>
+            <span>{{field}}</span>
+        </div>
+        {% endfor %}
+    <input type="submit" value="Save" class="btn btn--sub btn--lg  my-md">
+    </div>
+</form>
+{% endblock content %}

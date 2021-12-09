@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+{% load filtags %}
+{% block content %}
+<div class="container" style="padding-top: 30px ;">
+    {% for profile in profiles%}
+    <div class="grid grid--three">
+    <div class="card" style="margin-bottom: 40px;padding-left: 10px; width: 50%;height: 90%; padding-right: 10px; margin-right: 0px;">
+        <br>
+        <h4  ><a href= "{% url 'account' profile.id %}" style="color:#C36A2D;">{{profile.username.title}}</a></h4>
+        <!-- <img src="{{blog.feature_image.url}}" style="width: 45%;float: right; padding: 5px;"> -->
+        <img class="avatar avatar--xl dev__avatar" src="{{profile.image_url}}" style="float: right; margin-bottom: 20px;" />
+
+        <br>
+        <p>{{profile.into}} </p>
+        {% if profile.bio %}
+        <p style="text-indent: 5em;">{{profile.bio|slice:'250'}}...</p>
+        {% else %}
+        <p style="margin-top: 60px;">&ensp;</p>
+        {% endif %}
+        <a title="twitter" href="{% url 'account' profile.id %}" style="margin-top: 60px;">View</a>
+        {%  follow_finder  profile  as result %}
+        
+        {%if not result %}
+        
+        <a title="twitter" href="{% url 'follow' profile.id %}" style="margin-top: 60px; margin-left: 50px;">Follow</a>
+        {% endif %}
+    </div>
+    </div>  
+    {% endfor %}
+
+</div>
+
+{% endblock content %}

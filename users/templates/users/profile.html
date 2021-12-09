@@ -1,0 +1,80 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<div class="layout">
+    <div class="container" style="text-align: center; padding-top: 10px;">
+        <img class="avatar avatar--xl dev__avatar" src="{{profile.image_url}}" />
+        <h4>{{profile.name}} ({{profile.username}})</h4>
+        {% if profile.intro %}
+        {{profile.intro}}
+        {% endif %}
+        <a title="Twitter" href="{% url 'update-profile' %}" style="padding-top: 5px;"><i>Edit</i></a>
+    </div>
+
+    <div class="column column--2of3" style="text-align: left; padding-top: 30px;">
+        {% if profile == logged_user %}
+        <h4>Welcome {{profile.username.title}}!</h4>
+        <br>
+        <p><a href="{% url 'timeline' %}">Go to Timeline</a></p>
+        <br>
+        {% endif %}
+        <hr style="border: dotted; border-bottom: none;width: 8%; margin-top: 10px; 
+        margin-left: 80px; border-width: 4px; margin-bottom: 20px;">
+        {{profile.followers_count}}
+        <label>Followers</label>
+        <label style="padding-left: 10px;">Following</label>
+        {{profile.following_count}}
+        <label><p> No.of Blogs {{profile.blog_count.count}}</p></label>
+        {% if logged_user == profile %}
+        <a title="twitter" href= "{% url 'add-blog' %}">Add Blog</a>
+        {% endif %}
+        <br>
+        
+        <hr style="border: dotted; border-bottom: none;width: 8%; margin-top: 10px; margin-left: 80px; border-width: 4px;">
+        {% if logged_user == profile %}
+        <table style="text-align: left; padding-top: 30px;">
+            <tr>
+                <th>Following</th>
+            </tr>
+            {% for follow in following%}
+            <tr>
+                <td>{{follow.following}}<a href="{% url 'unfollow' follow.following.id%}" style="padding: 5px 10px;">Unfollow</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <label>&ensp;</label>
+        {% endif %}
+    </div>
+
+    <div class="layout" style="text-align: left; padding-top: 0; width: 70%; padding-left: 50px;">
+
+        {% for blog in profile.blog_count %}
+
+        <div class="container " style="text-align: left;">
+            <img class="project__thumbnail" src="{{ blog.image_url }}" alt="project thumbnail" style="height: 350px;" />
+            <div class="card__body" style="padding-left: 0;">
+                <h3 class="project__title" ><a href="{% url 'view-blog' blog.id%}" class="project__title"> {{blog.title}}</a></h3>
+                <p class="project--rating">
+                    <span style="font-weight: bold;">{{blog.post|slice:":150"}}%</span>
+                </p>
+                <a href="{% url 'view-blog' blog.id%}">Viewblog</a>
+                {% if logged_user == profile  %}
+                <a href="{% url 'view-blog' blog.id%}" style="padding-left: 580px;">Edit</a>
+                {% endif %}
+            </div>
+            <hr style="border: dotted; border-bottom: none;margin-left: 260px;  
+            margin-bottom: 30px; width: 30%; border-width: 5px; margin-top: 10px;">
+        </div>
+
+            {%endfor%}
+        
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container" style="padding-top: 30px ;">
+    {% for blog in blogs%}
+    <div class="card" style="margin-bottom: 40px;padding-left: 10px;">
+        <br>
+        <h4 style="color:#C36A2D;" href= "{% url 'view-blog' blog.id %}">{{blog.title}}</h4>
+        <img src="{{blog.image_url}}" style="width: 45%;float: right; padding: 5px;">
+        <p >By <strong><a href="{% url 'account' blog.writer.id %}">{{blog.writer}}</a></strong></p>
+        <br>
+        <p style="text-indent: 5em;">{{blog.post|slice:'250'}}...</p>
+        {% if blog.vote_total %}
+        <label style="padding-right: 30px;">Total Votes: {{ blog.vote_total  }}</label>
+        <label style="padding-right: 10px;">+ve Ratio: {{ blog.vote_ratio }}</label>
+        {% endif %}
+        <a title="twitter" href="{% url 'view-blog' blog.id %}" style="margin-top: 140px;">View</a>
+    </div>    
+    {% endfor %}
+
+</div>
+
+{% endblock content %}

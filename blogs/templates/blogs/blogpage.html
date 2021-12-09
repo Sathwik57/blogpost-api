@@ -1,0 +1,136 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<main class="singleProject my-md">
+    <div class="container">
+      <div class="layout">
+        <div class="column column--1of3">
+            <img class="singleProject__preview" src="{{blog.image_url}}" alt="portfolio thumbnail" />
+            <a href="{% url 'account' blog.writer.id%}" class="singleProject__developer">By {{blog.writer.username.title}}</a>
+            <h2 class="singleProject__title" style="margin-bottom: 0px;">{{blog.title}} </h2>
+
+                {% if blog.subtitle %}
+            <h5 style="padding-left: 400px; margin-bottom: 10px ;" class="singleProject__subtitle">    - {{blog.subtitle}} </h5>
+                {% endif %}
+            
+          <div class="singleProject__info">
+                {{blog.post|linebreaks}}
+            </div>
+        </div>
+
+        <div class="column column--2of3" style="text-align: center;">
+
+            <h3 class="singleProject__subtitle">Author</h3>
+            <h6><a href="{% url 'account' blog.writer.id%}">{{blog.writer.username.title}}</a></h6>
+          <div class="singleProject__toolStack">
+          </div>
+          <img class="avatar avatar--xl dev__avatar" src="{{blog.writer.image_url}}" />
+          <br>
+          {% if blog.writer.intro %}
+          <p>{{blog.writer.intro}}</p>
+          <br>
+          {% endif %}
+          <p style="align-self: left; text-align: left;">Contact:</p>
+          <br>
+          <a title="Twitter" href="{{blog.writer.social_twitter}}" target="_blank"><i class="im im-twitter" style="padding-right: 10px;"></i></a>
+          
+          <a title="Twitter" href="{{blog.writer.social_insta}}" target="_blank"><i class="im im-instagram"></i></a>
+          <p>
+            <br>
+            {% if blog.vote_total%}
+          <label> {{blog.vote_ratio}} Positive Reviews({{blog.vote_total}} Votes)</label>
+          </p>
+          {% else %}
+          <label> Be the first to <a href= "#comment">Review</a></label>
+        </p>
+        {% endif %}
+          {% if blog.image_set.all%}
+          {% for img in blog.image_set.all%}
+          <img class="avatar avatar--xl dev__avatar" src="{{img.image_x.url}}" />
+          {% endfor %}
+          {% endif %}
+
+          </div>
+        
+        </div>
+        <div>
+        <div style="width: 50%; height: 50%;">
+          <label for="formInput#textarea" style="color:darkslategray;" id ='comment'>Comments: </label>
+          {% if request.user.is_authenticated %}
+          {% if not voted and not request.user.profile == blog.writer%}
+          
+          <form class="form" action="{% url 'view-blog' blog.id%}" method="POST">
+              <!-- Textarea -->
+              {% csrf_token %}
+              <div class="form__field">
+                <label for="formInput#textarea">Comments: </label>
+                {% for f in form %}
+                <label for="formInput#textarea">{{ f.label }} </label>
+                {{f}}
+                
+                {% endfor %} 
+                <!-- <textarea class="input input--textarea" name="message" id="formInput#textarea"
+                  placeholder="Write your comments here..."></textarea> -->
+              </div>
+              <input class="btn btn--sub btn--lg" type="submit" value="Add review" />
+            </form>
+          {% endif %}
+          {% endif %}
+        </div>  
+            <div class="commentList">
+              
+              {% for rev in blog.review_set.all %}
+              
+              <div class="comment">
+                <a href="{% url 'account' rev.owner.id}">
+                  <img class="avatar avatar--md"
+                    src="{{rev.owner.image_url}}" alt="user" />
+                </a>
+                <div class="comment__details">
+                  <a href="profile.html" class="comment__author">{{rev.owner.username.title}}</a>
+                  <p class="comment__info">
+                    {{rev.body}} dadf
+                  </p>
+                </div>
+              </div>
+              
+              {% endfor %}
+            </div>
+          </div>
+        <hr style="border: dotted 6px; width: 10%; border-bottom: none; 
+        margin-left: 400px; margin-top: 20px;margin-bottom: 20px;">
+            <h4 style="margin-left: 320px;">Stories you may like</h4>
+            <br>
+        <div class="grid grid--three">
+
+          {% for rblog in rel_blogs %}
+          <div class="column" href ="{% url 'view-blog' rblog.id%}">
+            <div class="card project">
+              <a href ="{% url 'view-blog' rblog.id%}" class="project">
+                <img class="project__thumbnail" src="{{ rblog.image_url }}" alt="project thumbnail" />
+                <div class="card__body">
+                  <h3 class="project__title" >{{rblog.title}}</h3>
+                  <h6 ><a href="{% url 'account' rblog.writer.id%}">by {{rblog.writer.username.title}}</a></h6>
+                  <p class="project--rating">
+                    <span style="font-weight: bold;">{{rblog.post|slice:":105"}}%</span>
+                  </p>
+  
+                  <div class="project__tags">
+                    {% for tag in rblog.tags.all %}
+                    <span class="tag tag--pill tag--main">
+                      <small>{{tag.name}}</small>
+                    </span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
+
+{% endblock content %}              
